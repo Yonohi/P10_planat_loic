@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Projet, Probleme, Commentaire
 
-# Register your models here.
+admin.site.register(Projet)
+admin.site.register(Probleme)
+admin.site.register(Commentaire)
