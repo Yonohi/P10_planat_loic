@@ -32,4 +32,4 @@ class Probleme(models.Model):
 
 
 class Commentaire(models.Model):
-    Description = models.TextField()
+    description = models.TextField()
