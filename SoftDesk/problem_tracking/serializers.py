@@ -1,19 +1,32 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Projet, Probleme, Commentaire
+from django.contrib.auth.models import User
+from .models import Project, Issue, Comment, Contributor
 
-class ProjetSerializer(ModelSerializer):
+class ProjectSerializer(ModelSerializer):
     class Meta:
-        model = Projet
-        fields = ['titre', 'description', 'type']
+        model = Project
+        fields = ['id', 'titre', 'description', 'type', 'auteur']
 
 
-class ProblemeSerializer(ModelSerializer):
+class IssueSerializer(ModelSerializer):
     class Meta:
-        model = Probleme
-        fields = ['titre', 'description', 'priorite', 'balise', 'statut', 'created_time']
+        model = Issue
+        fields = ['id', 'titre', 'description', 'assigne', 'priorite', 'balise', 'statut', 'created_time', 'projet']
 
 
-class CommentaireSerializer(ModelSerializer):
+class CommentSerializer(ModelSerializer):
     class Meta:
-        model = Commentaire
-        fields = ['description']
+        model = Comment
+        fields = ['id', 'description', 'auteur', 'probleme']
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
+
+
+class ContributorSerializer(ModelSerializer):
+    class Meta:
+        model = Contributor
+        fields = ['user', 'project', 'permission', 'role']

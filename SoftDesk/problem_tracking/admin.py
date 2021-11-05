@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Projet, Probleme, Commentaire
+from .models import Project, Issue, Comment
 
-admin.site.register(Projet)
-admin.site.register(Probleme)
-admin.site.register(Commentaire)
+admin.site.register(Project)
+admin.site.register(Issue)
+admin.site.register(Comment)
