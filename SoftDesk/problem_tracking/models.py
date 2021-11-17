@@ -64,6 +64,7 @@ class Comment(models.Model):
                                  on_delete=models.CASCADE,
                                  related_name='comments',
                                  default=0)
+    created_time = models.DateTimeField(auto_now_add=True)
 
 
 class Contributor(models.Model):
