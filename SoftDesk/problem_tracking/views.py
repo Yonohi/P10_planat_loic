@@ -10,25 +10,52 @@ from rest_framework.mixins import DestroyModelMixin, CreateModelMixin, ListModel
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
+from .permissions import IsAuthorOrReadOnly, IsContributor
+from itertools import chain
 
 class ProjectViewset(ModelViewSet):
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
+        return Project.objects.all()
+
+    """
+    Quelques essais à voir avec mon mentor:
+        def get_queryset(self):
         user = get_user(self.request)
-        return Project.objects.filter(auteur=user)
+        contributor = Contributor.objects.filter(user=user)[0]
+        projects = Project.objects.filter(auteur=user)
+        projects_contrib = Project.objects.filter(contributors=contributor)
+        all_proj = projects | projects_contrib
+        return all_proj
+    
+        def get_queryset(self):
+        user = get_user(self.request)
+        all_projects = []
+        contributors = Contributor.objects.filter(user=user)
+        projects = Project.objects.filter(auteur=user)
+        for project in projects:
+            if project not in all_projects:
+                all_projects.append(project)
+        for contributor in contributors:
+            if contributor.project not in all_projects:
+                all_projects.append(contributor.project)
+        return sorted(all_projects, key=lambda x:x.id)
+    """
+
 
 
 class IssueViewset(ModelViewSet):
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
     def get_queryset(self):
 
         if 'project_pk' in self.kwargs:
             return Issue.objects.filter(projet=self.kwargs['project_pk'])
         else:
+            # mettre plus tard que le projet n'existe pas
             return Issue.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -45,7 +72,7 @@ class IssueViewset(ModelViewSet):
 
 class CommentViewset(ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsContributor]
 
     def get_queryset(self):
         if 'issue_pk' in self.kwargs:

@@ -15,22 +15,28 @@ class ProjectSerializer(serializers.ModelSerializer):
         if self.context['request'].method == 'POST':
             validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
+    # On créer notre contributeur (auteur) en même temps que la création du projet
     def create(self, validated_data):
-        return Project.objects.create(**validated_data)
+        project_created = Project.objects.create(**validated_data)
+        Contributor.objects.create(user=validated_data['auteur'],
+                                   project=project_created,
+                                   permission='all',
+                                   role='AUTHOR')
+        return project_created
 
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        fields = ['id', 'titre', 'description', 'assigne', 'priorite', 'balise', 'statut', 'projet', 'created_time']
-        read_only_fields = ['projet', 'assigne']
+        fields = ['id', 'titre', 'description', 'assigne', 'auteur', 'priorite', 'balise', 'statut', 'projet', 'created_time']
+        read_only_fields = ['projet', 'auteur']
     # Attention à ne pas le mettre dans la classe meta
     def validate(self, validated_data):
         if self.context['request'].method == 'POST':
             # On met la valeur de projet à celle du projet de l'endpoint
             validated_data['projet'] = Project.objects.filter(id=self.context['project_pk'])[0]
             # Meme chose pour l'assigne
-            validated_data['assigne'] = get_user(self.context['request'])
+            validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
     def create(self, validated_data):
         return Issue.objects.create(**validated_data)
