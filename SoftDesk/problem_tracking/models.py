@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-# from django.contrib.auth import get_user
 
 
 PROJECT_TYPES = [('BE', 'Back-end'),
@@ -20,6 +19,7 @@ PERMISSIONS = []
 ROLES = [('AUTHOR', 'Auteur'),
          ('MANAGER', 'Responsable'),
          ('CREATOR', 'Créateur')]
+
 
 class Project(models.Model):
     titre = models.CharField(max_length=50)
@@ -67,8 +67,8 @@ class Comment(models.Model):
 
 class Contributor(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE,
-                               related_name='contributors')
+                             on_delete=models.CASCADE,
+                             related_name='contributors')
     project = models.ForeignKey('Project',
                                on_delete=models.CASCADE,
                                related_name='contributors')
