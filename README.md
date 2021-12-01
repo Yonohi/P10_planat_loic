@@ -4,12 +4,13 @@
 
 Project Django using Django REST Framework. 
 
-The goal is to have an API which allow us to show issues from projects, detected by contributors.
+The goal is to have an API which allow us to share issues from projects, detected by contributors.
 We could create projects with contributors and for each project, contributors can add issues they found and write comments for each issues. 
 
 ***
 ## Requirements
 Python 3 : https://www.python.org/downloads/
+POSTMAN : https://www.postman.com
 ## Installation
 
 In the terminal, move to the directory where you want to install the repository with the command line:
@@ -49,15 +50,22 @@ Run in local
 ```
 python3 manage.py runserver
 ```
-Now you can go to the address
+Now you can test with POSTMAN the collection API_10
+## How it works
+### POSTMAN:
+To signup:
 ```
 http://127.0.0.1:8000/signup/
 ```
-## How it works
-### By POSTMAN:
-
-
-At this address you can register or log in. If you want to see the different projects go to : 
+At this address you can log in :
+```
+http://127.0.0.1:8000/login/
+```
+Make a refresh because the time limit for the token has passed:
+```
+http://127.0.0.1:8000/api/token/refresh/
+```
+If you want to see the different projects go to : 
 ```
 http://127.0.0.1:8000/api/projects/
 ```
@@ -69,7 +77,13 @@ or the comments of an issue (if you are contributor of the project) :
 ```
 http://127.0.0.1:8000/api/projects/{id}/issues/{id}/comments/
 ```
-For more information about endpoint : 
+To see contributors of the project :
+```
+http://127.0.0.1:8000/api/projects/{id}/users/
+```
+For more information about endpoint, see the documentation on postman:
+https://documenter.getpostman.com/view/16930251/UVJeGGdh
+
 ## Need a superuser?
 You have to go to the project folder and type
 ```

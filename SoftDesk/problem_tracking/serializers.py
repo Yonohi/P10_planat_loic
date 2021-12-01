@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user
 from django.contrib.auth.models import User
 from .models import Project, Issue, Comment, Contributor
+from django.contrib.auth import get_user
+import django.contrib.auth.password_validation as validators
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -44,7 +45,8 @@ class IssueSerializer(serializers.ModelSerializer):
     def validate(self, validated_data):
         if self.context['request'].method == 'POST':
             # On met la valeur de projet à celle du projet de l'endpoint
-            validated_data['projet'] = Project.objects.filter(id=self.context['project_pk'])[0]
+            validated_data['projet'] = Project.objects.filter(
+                id=self.context['project_pk'])[0]
             # Meme chose pour l'assigne
             validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
@@ -61,7 +63,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def validate(self, validated_data):
         if self.context['request'].method == 'POST':
-            validated_data['probleme'] = Issue.objects.filter(id=self.context['issue_pk'])[0]
+            validated_data['probleme'] = Issue.objects.filter(
+                id=self.context['issue_pk'])[0]
             validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
 
@@ -86,6 +89,10 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+    def validate_password(self, data):
+        validators.validate_password(password=data, user=User)
+        return data
+
 
 class ContributorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -95,7 +102,8 @@ class ContributorSerializer(serializers.ModelSerializer):
 
     def validate(self, validated_data):
         if self.context['request'].method == 'POST':
-            validated_data['project'] = Project.objects.filter(id=self.context['project_pk'])[0]
+            validated_data['project'] = Project.objects.filter(
+                id=self.context['project_pk'])[0]
         return validated_data
 
     def create(self, validated_data):

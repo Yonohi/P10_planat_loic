@@ -70,7 +70,7 @@ class Contributor(models.Model):
                              on_delete=models.CASCADE,
                              related_name='contributors')
     project = models.ForeignKey('Project',
-                               on_delete=models.CASCADE,
-                               related_name='contributors')
+                                on_delete=models.CASCADE,
+                                related_name='contributors')
     permission = models.CharField(max_length=50, choices=PERMISSIONS)
     role = models.CharField(max_length=50, choices=ROLES)
