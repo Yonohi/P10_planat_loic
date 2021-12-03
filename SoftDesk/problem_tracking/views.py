@@ -31,8 +31,8 @@ class ProjectViewset(ModelViewSet):
 
 class IssueViewset(ModelViewSet):
     serializer_class = IssueSerializer
-    # IsLogged doit apparaitre avant IsContributor car l'utilisateur doit être
-    # connecté pour vérifier s'il s'agit d'un contributeur
+    # IsLogged should be before IsContributor because the user should be
+    # connected to verify if it's a contributor
     permission_classes = [IsAuthenticated,
                           IsLogged,
                           IsContributor,

@@ -16,7 +16,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
 
-    # On créé notre contributeur (auteur) en même temps que le projet
+    # We created our contributor (author) at the same time as the project
     def create(self, validated_data):
         project_created = Project.objects.create(**validated_data)
         Contributor.objects.create(user=validated_data['auteur'],
@@ -41,13 +41,12 @@ class IssueSerializer(serializers.ModelSerializer):
                   'created_time']
         read_only_fields = ['projet', 'auteur']
 
-    # Attention à ne pas le mettre dans la classe meta
     def validate(self, validated_data):
         if self.context['request'].method == 'POST':
-            # On met la valeur de projet à celle du projet de l'endpoint
+            # 'projet' automatically filled
             validated_data['projet'] = Project.objects.filter(
                 id=self.context['project_pk'])[0]
-            # Meme chose pour l'assigne
+            # 'auteur' automatically filled
             validated_data['auteur'] = get_user(self.context['request'])
         return validated_data
 
@@ -82,14 +81,14 @@ class UserSerializer(serializers.ModelSerializer):
                   'email',
                   'password']
 
-    # cette méthode est nécessaire ou en tout cas c'est la façon que j'ai
-    # trouvé pour avoir le hashage du password, sinon le user est crée mais
-    # le mot de passe ne convient pas
+    # create_user to have the hash
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
 
-    def validate_password(self, data):
+    # password not check with create_user, need the following code
+    @staticmethod
+    def validate_password(data):
         validators.validate_password(password=data, user=User)
         return data
 
