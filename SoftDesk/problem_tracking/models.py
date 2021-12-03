@@ -15,7 +15,7 @@ BALISES = [('BUG', 'BUG'),
 STATUTS = [('A_FAIRE', 'A faire'),
            ('EN_COURS', 'En cours'),
            ('TERMINE', 'Terminé')]
-PERMISSIONS = []
+PERMISSIONS = [('ALL', 'All Permissions')]
 ROLES = [('AUTHOR', 'Auteur'),
          ('MANAGER', 'Responsable'),
          ('CREATOR', 'Créateur')]

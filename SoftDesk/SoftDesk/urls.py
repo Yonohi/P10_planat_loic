@@ -20,8 +20,7 @@ from rest_framework_nested import routers
 from problem_tracking.views import (ProjectViewset, IssueViewset,
                                     CommentViewset, ContributorViewset,
                                     SignupView, my_login_view)
-from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
+from rest_framework_simplejwt.views import TokenRefreshView
 
 
 router = routers.SimpleRouter()
@@ -46,9 +45,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path(r'api/', include(projects_router.urls)),
     path(r'api/', include(problemes_router.urls)),
-    path('api/token/',
-         TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
     path('api/token/refresh/',
          TokenRefreshView.as_view(),
          name='token_refresh'),
