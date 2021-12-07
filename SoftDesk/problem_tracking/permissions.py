@@ -8,7 +8,7 @@ class IsAuthorOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
-        elif obj.auteur == request.user:
+        elif obj.author == request.user:
             return True
         else:
             return False
@@ -48,7 +48,7 @@ class ProjectAuthorOrContributorHimself(BasePermission):
         if request.method == 'DELETE':
             project = Project.objects.filter(id=view.kwargs['project_pk'])[0]
             contributor = Contributor.objects.filter(id=view.kwargs['pk'])[0]
-            if project.auteur == user or user == contributor.user:
+            if project.author == user or user == contributor.user:
                 return True
             else:
                 return False

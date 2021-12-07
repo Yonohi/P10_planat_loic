@@ -41,7 +41,7 @@ class IssueViewset(ModelViewSet):
     def get_queryset(self):
 
         if 'project_pk' in self.kwargs:
-            return Issue.objects.filter(projet=self.kwargs['project_pk'])
+            return Issue.objects.filter(project=self.kwargs['project_pk'])
         else:
             pass
 
@@ -68,7 +68,7 @@ class CommentViewset(ModelViewSet):
 
     def get_queryset(self):
         if 'issue_pk' in self.kwargs:
-            return Comment.objects.filter(probleme=self.kwargs['issue_pk'])
+            return Comment.objects.filter(issue=self.kwargs['issue_pk'])
         else:
             pass
 

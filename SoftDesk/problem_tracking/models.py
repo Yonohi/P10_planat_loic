@@ -22,46 +22,46 @@ ROLES = [('AUTHOR', 'Auteur'),
 
 
 class Project(models.Model):
-    titre = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     description = models.TextField()
     type = models.CharField(choices=PROJECT_TYPES, max_length=30)
-    auteur = models.ForeignKey(to=settings.AUTH_USER_MODEL,
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='projects')
 
     def __str__(self):
-        return self.titre
+        return self.title
 
 
 class Issue(models.Model):
-    titre = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     description = models.TextField()
-    auteur = models.ForeignKey(to=settings.AUTH_USER_MODEL,
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='issues_auteur')
-    assigne = models.ForeignKey(to=settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                related_name='issues_assigne')
-    priorite = models.CharField(max_length=50, choices=PRIORITES)
-    balise = models.CharField(max_length=50, choices=BALISES)
-    statut = models.CharField(max_length=50, choices=STATUTS)
+    assignee_user = models.ForeignKey(to=settings.AUTH_USER_MODEL,
+                                      on_delete=models.CASCADE,
+                                      related_name='issues_assigne')
+    priority = models.CharField(max_length=50, choices=PRIORITES)
+    tag = models.CharField(max_length=50, choices=BALISES)
+    status = models.CharField(max_length=50, choices=STATUTS)
     created_time = models.DateTimeField(auto_now_add=True)
-    projet = models.ForeignKey('Project',
-                               on_delete=models.CASCADE,
-                               related_name='issues')
+    project = models.ForeignKey('Project',
+                                on_delete=models.CASCADE,
+                                related_name='issues')
 
     def __str__(self):
-        return self.titre
+        return self.title
 
 
 class Comment(models.Model):
     description = models.TextField()
-    auteur = models.ForeignKey(to=settings.AUTH_USER_MODEL,
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='comments')
-    probleme = models.ForeignKey('Issue',
-                                 on_delete=models.CASCADE,
-                                 related_name='comments')
+    issue = models.ForeignKey('Issue',
+                              on_delete=models.CASCADE,
+                              related_name='comments')
     created_time = models.DateTimeField(auto_now_add=True)
 
 
